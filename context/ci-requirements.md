@@ -10,6 +10,9 @@
 
 <!-- Copilot: summarize the tech stack (Node.js version, test framework, IaC tool) that CI must validate (from docs/project-overview.md) -->
 
+CI must validate a Node.js 20 + Express 4 backend and a React 18 frontend, organized as npm workspaces (`packages/backend`, `packages/frontend`). Both packages are tested with **Jest** (backend uses `supertest` for HTTP-layer API tests; coverage must be enforced per [docs/testing-guidelines.md](../docs/testing-guidelines.md) — 80% for backend, 70% for frontend). The backend and frontend are containerized via Dockerfiles for ECS Fargate deployment, so CI must also build and push Docker images to ECR. Infrastructure is defined with **Terraform** (>= 1.5, AWS provider ~> 5.0) calling the Slalom PE Lab golden-path module, and must be validated with `terraform validate`, `tflint`, and `checkov` (0 HIGH severity findings).
+
+
 ## Reusable Workflow (`golden-path-ci.yml`)
 
 **Trigger:** `on: workflow_call` with inputs:
